@@ -2,6 +2,7 @@ import request from 'supertest'
 import typeorm from 'typeorm'
 import faker from 'faker'
 import { dealFactory } from '@cig-platform/factories'
+import { IDealEvent } from '@cig-platform/types'
 
 import App from '@Configs/server'
 import { DealEventValueEnum } from '@cig-platform/enums'
@@ -136,6 +137,30 @@ describe('Deal actions', () => {
       })
       expect(mockFindById).toHaveBeenCalledWith(dealId)
       expect(mockSave).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('Index', () => {
+    it('return all deal events', async () => {
+      const events = [] as IDealEvent[]
+      const deal = dealFactory()
+      const mockFindByDealId = jest.fn().mockResolvedValue(events)
+      const mockFindById = jest.fn().mockResolvedValue(deal)
+
+      jest.spyOn(typeorm, 'getCustomRepository').mockReturnValue({
+        findById: mockFindById,
+        findByDealId: mockFindByDealId
+      })
+
+      const response = await request(App).get(`/v1/deals/${deal.id}/events`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toMatchObject({
+        ok: true,
+        events
+      })
+      expect(mockFindById).toHaveBeenCalledWith(deal.id)
+      expect(mockFindByDealId).toHaveBeenCalledWith(deal.id)
     })
   })
 })
