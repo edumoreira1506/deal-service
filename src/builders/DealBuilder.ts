@@ -33,7 +33,7 @@ export default class DealBuilder {
     return this
   }
 
-  async validate(): Promise<void> {
+  validate = async () => {
     const advertisingServiceClient = new AdvertisingServiceClient(ADVERTISING_SERVICE_URL)
     const seller = await advertisingServiceClient.getMerchant(this._sellerId)
     const buyer = await advertisingServiceClient.getMerchant(this._buyerId)
@@ -54,7 +54,7 @@ export default class DealBuilder {
 
     deal.sellerId = this._sellerId
     deal.advertisingId = this._advertisingId
-    deal.sellerId = this._sellerId
+    deal.buyerId = this._buyerId
 
     return deal
   }
