@@ -1,7 +1,7 @@
-import { ValidationError, AdvertisingServiceClient } from '@cig-platform/core'
+import { ValidationError } from '@cig-platform/core'
 
 import i18n from '@Configs/i18n'
-import { ADVERTISING_SERVICE_URL } from '@Constants/url'
+import AdvertisingServiceClient from '@Clients/AdvertisingServiceClient'
 import Deal from '@Entities/DealEntity'
 import DealRepository from '@Repositories/DealRepository'
 
@@ -34,10 +34,9 @@ export default class DealBuilder {
   }
 
   validate = async () => {
-    const advertisingServiceClient = new AdvertisingServiceClient(ADVERTISING_SERVICE_URL)
-    const seller = await advertisingServiceClient.getMerchant(this._sellerId)
-    const buyer = await advertisingServiceClient.getMerchant(this._buyerId)
-    const advertising = await advertisingServiceClient.getAdvertising(this._sellerId, this._advertisingId)
+    const seller = await AdvertisingServiceClient.getMerchant(this._sellerId)
+    const buyer = await AdvertisingServiceClient.getMerchant(this._buyerId)
+    const advertising = await AdvertisingServiceClient.getAdvertising(this._sellerId, this._advertisingId)
     const dealWithSameAdvertisingId = await this._dealRepository.findByAdvertisingId(this._advertisingId)
 
     if (!seller) throw new ValidationError(i18n.__('deal.errors.invalid-seller'))
