@@ -28,6 +28,7 @@ module.exports = {
           "@Builders": "./src/builders",
           "@Middlewares": "./src/middlewares",
           "@Services": "./src/services",
+          "@Clients": "./src/clients",
           "@Schemas": "./src/schemas",
           "@Docs": "./src/docs"
         },
