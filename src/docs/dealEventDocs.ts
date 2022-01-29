@@ -9,6 +9,10 @@ const dealEventDocs = {
       title: 'Register deal event',
       objectSchema: storeDealEventSchema,
     },
+    {
+      method: 'get',
+      title: 'Get deal events',
+    }
   ], {
     pathVariables: [
       {
