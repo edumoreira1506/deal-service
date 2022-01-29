@@ -2,8 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import DealEvent from './DealEventEntity'
 
 @Entity('deals')
 export default class DealEntity {
@@ -30,4 +32,7 @@ export default class DealEntity {
 
   @Column({ type: 'uuid', name: 'seller_id' })
   sellerId: string;
+
+  @OneToMany(() => DealEvent, event => event.deal)
+  events?: DealEvent[];
 }
