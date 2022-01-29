@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express'
-import { ApiError, BaseController, NotFoundError, withRequestParam } from '@cig-platform/core'
+import {  BaseController, NotFoundError, withRequestParam } from '@cig-platform/core'
 
 import DealController from '@Controllers/DealController'
 import DealRepository from '@Repositories/DealRepository'
@@ -8,10 +8,9 @@ import { RequestWithDeal } from '@Types/requests'
 import CancelledDealError from '@Errors/CancelledDealError'
 import FinishedDealError from '@Errors/FinishedDealError'
 
-export const withDealParamFactory =
-  (errorCallback: (res: Response, error: ApiError) => Response) =>
-    (req: RequestWithDeal, res: Response, next: NextFunction) => {
-      return withRequestParam<DealRepository, Deal>('dealId', 'deal', DealController, errorCallback)(req, res, () => {
+export const withNotFinishedDealParam =
+    (req: RequestWithDeal, res: Response, next: NextFunction) =>
+      withRequestParam<DealRepository, Deal>('dealId', 'deal', DealController, BaseController.errorResponse)(req, res, () => {
         try {
           if (!req.deal) throw new NotFoundError()
           if (req.deal.cancelled) throw new CancelledDealError()
@@ -19,9 +18,8 @@ export const withDealParamFactory =
 
           next()
         } catch (error: any) {
-          return errorCallback(res, error?.getError?.() ?? error)
+          return BaseController.errorResponse(res, error?.getError?.() ?? error)
         }
       })
-    }
 
-export default withDealParamFactory(BaseController.errorResponse)
+export default withRequestParam<DealRepository, Deal>('dealId', 'deal', DealController, BaseController.errorResponse)
