@@ -12,6 +12,7 @@ class DealController extends BaseController<Deal, DealRepository>  {
     super(repository)
 
     this.store = this.store.bind(this)
+    this.index = this.index.bind(this)
   }
 
   @BaseController.errorHandler()
@@ -25,6 +26,15 @@ class DealController extends BaseController<Deal, DealRepository>  {
     const deal = await this.repository.save(dealDTO)
 
     return BaseController.successResponse(res, { deal, message: i18n.__('messages.success') })
+  }
+
+  @BaseController.errorHandler()
+  async index(req: Request, res: Response): Promise<Response> {
+    const sellerId = String(req?.query?.sellerId ?? '')
+    const buyerId = String(req?.query?.buyerId ?? '')
+    const deals = await this.repository.search({ sellerId, buyerId })
+
+    return BaseController.successResponse(res, { deals, message: i18n.__('messages.success') })
   }
 }
 

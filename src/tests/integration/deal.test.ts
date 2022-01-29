@@ -1,5 +1,6 @@
 import request from 'supertest'
 import typeorm from 'typeorm'
+import faker from 'faker'
 import { dealFactory, merchantFactory, advertisingFactory } from '@cig-platform/factories'
 
 import App from '@Configs/server'
@@ -128,6 +129,29 @@ describe('Deal actions', () => {
           message: i18n.__('deal.errors.already-bought')
         }
       })
+    })
+  })
+
+  describe('index', () => {
+    it('return all deals', async () => {
+      const deals = Array(10).fill(dealFactory())
+      const mockSearch = jest.fn().mockResolvedValue(deals)
+      const sellerId = faker.datatype.uuid()
+      const buyerId = faker.datatype.uuid()
+
+      jest.spyOn(typeorm, 'getCustomRepository').mockReturnValue({
+        search: mockSearch,
+      })
+
+      const response = await request(App).get(`/v1/deals?sellerId=${sellerId}&buyerId=${buyerId}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toMatchObject({
+        ok: true,
+        deals: deals.map(deal => ({ ...deal, createdAt: deal.createdAt.toISOString() })),
+        message: i18n.__('messages.success')
+      })
+      expect(mockSearch).toHaveBeenCalledWith({ sellerId, buyerId })
     })
   })
 })

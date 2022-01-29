@@ -9,6 +9,20 @@ const dealDocs = {
       title: 'Register deal',
       objectSchema: storeDealSchema,
     },
+    {
+      method: 'get',
+      title: 'Get deals',
+      queryParams: [
+        {
+          name: 'buyerId',
+          type: 'string'
+        },
+        {
+          name: 'sellerId',
+          type: 'string'
+        }
+      ]
+    },
   ]),
 }
 

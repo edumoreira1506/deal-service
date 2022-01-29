@@ -14,4 +14,20 @@ export default class DealRepository extends BaseRepository<Deal> {
       }
     })
   }
+
+  async search({ sellerId, buyerId }: { sellerId?: string; buyerId?: string } = {}) {
+    try {
+      const deals = await this.find({
+        where: {
+          ...(sellerId ? { sellerId } : {}),
+          ...(buyerId ? { buyerId } : {}),
+          active: true,
+        }
+      })
+
+      return deals
+    } catch {
+      return []
+    }
+  }
 }
