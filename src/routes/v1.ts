@@ -7,5 +7,6 @@ import { storeDealSchema } from '@Schemas/DealSchemas'
 const router = express.Router()
 
 router.post('/deals', withBodyValidation(storeDealSchema), DealController.store)
+router.get('/deals', DealController.index)
 
 export default router
