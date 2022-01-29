@@ -13,5 +13,6 @@
 	"deal-event.errors.invalid-value": "Valor do evento não suportado",
 	"deal-event.errors.cancelled-deal": "Essa compra foi cancelada",
 	"deal-event.errors.finished-deal": "Essa compra foi finalizada",
-	"messages.success": "messages.success"
+	"messages.success": "Boa!",
+	"errors.not-found": "Recurso não encontrado"
 }
