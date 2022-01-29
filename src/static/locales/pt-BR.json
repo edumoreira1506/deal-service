@@ -5,5 +5,9 @@
 	"required-field": "{{field}} é obrigatório",
 	"validated": "Válido!",
 	"app.title": "CIG: Plataforma de Comercialização de Índio Gigante",
-	"app.description": "Documentação da API"
+	"app.description": "Documentação da API",
+	"deal.errors.invalid-seller": "Vendedor não encontrado",
+	"deal.errors.invalid-buyer": "Comprador não encontrado",
+	"deal.errors.invalid-advertising": "Anúncio não encontrado",
+	"deal.errors.already-bought": "Anúncio já foi comprado"
 }
