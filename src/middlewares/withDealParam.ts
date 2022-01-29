@@ -8,7 +8,7 @@ import { RequestWithDeal } from '@Types/requests'
 import CancelledDealError from '@Errors/CancelledDealError'
 import FinishedDealError from '@Errors/FinishedDealError'
 
-export const withDealParamFactory =
+export const withNotFinishedDealParam =
   (errorCallback: (res: Response, error: ApiError) => Response) =>
     (req: RequestWithDeal, res: Response, next: NextFunction) => {
       return withRequestParam<DealRepository, Deal>('dealId', 'deal', DealController, errorCallback)(req, res, () => {
@@ -24,4 +24,4 @@ export const withDealParamFactory =
       })
     }
 
-export default withDealParamFactory(BaseController.errorResponse)
+export default withRequestParam<DealRepository, Deal>('dealId', 'deal', DealController, BaseController.errorResponse)

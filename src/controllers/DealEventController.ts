@@ -12,6 +12,7 @@ class DealEventController extends BaseController<DealEvent, DealEventRepository>
     super(repository)
 
     this.store = this.store.bind(this)
+    this.index = this.index.bind(this)
   }
 
   @BaseController.errorHandler()
@@ -25,6 +26,14 @@ class DealEventController extends BaseController<DealEvent, DealEventRepository>
     const event = await this.repository.save(dealEventDTO)
 
     return BaseController.successResponse(res, { event, message: i18n.__('messages.success') })
+  }
+
+  @BaseController.errorHandler()
+  async index(req: Request, res: Response): Promise<Response> {
+    const dealId = req.params.dealId
+    const events = await this.repository.findByDealId(dealId)
+
+    return BaseController.successResponse(res, { events, message: i18n.__('messages.success') })
   }
 }
 
