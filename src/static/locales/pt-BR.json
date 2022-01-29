@@ -10,5 +10,9 @@
 	"deal.errors.invalid-buyer": "Comprador não encontrado",
 	"deal.errors.invalid-advertising": "Anúncio não encontrado",
 	"deal.errors.already-bought": "Anúncio já foi comprado",
-	"messages.success": "messages.success"
+	"deal-event.errors.invalid-value": "Valor do evento não suportado",
+	"deal-event.errors.cancelled-deal": "Essa compra foi cancelada",
+	"deal-event.errors.finished-deal": "Essa compra foi finalizada",
+	"messages.success": "Boa!",
+	"errors.not-found": "Recurso não encontrado"
 }
