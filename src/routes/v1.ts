@@ -12,7 +12,14 @@ import DealEventController from '@Controllers/DealEventController'
 const router = express.Router()
 
 router.post('/deals', withBodyValidation(storeDealSchema), DealController.store)
+
 router.get('/deals', DealController.index)
+
+router.get(
+  '/deals/:dealId',
+  withDealParam,
+  DealController.show
+)
 
 router.patch(
   '/deals/:dealId',

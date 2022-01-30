@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
 import { ObjectType } from 'typeorm'
-import { BaseController } from '@cig-platform/core'
+import { BaseController, NotFoundError } from '@cig-platform/core'
 
 import i18n from '@Configs/i18n'
 import DealRepository from '@Repositories/DealRepository'
 import Deal from '@Entities/DealEntity'
 import DealBuilder from '@Builders/DealBuilder'
+import { RequestWithDeal } from '@Types/requests'
 
 class DealController extends BaseController<Deal, DealRepository>  {
   constructor(repository: ObjectType<Deal>) {
@@ -14,6 +15,7 @@ class DealController extends BaseController<Deal, DealRepository>  {
     this.store = this.store.bind(this)
     this.index = this.index.bind(this)
     this.update = this.update.bind(this)
+    this.show = this.show.bind(this)
   }
 
   @BaseController.errorHandler()
@@ -38,6 +40,15 @@ class DealController extends BaseController<Deal, DealRepository>  {
       finished: req.body?.finished ?? false,
       cancelled: req.body?.cancelled ?? false,
     })
+  }
+
+  @BaseController.errorHandler()
+  async show(req: RequestWithDeal, res: Response) {
+    const deal = req.deal
+
+    if (!deal) throw new NotFoundError()
+
+    return BaseController.successResponse(res, { deal })
   }
 
   @BaseController.errorHandler()

@@ -154,4 +154,49 @@ describe('Deal actions', () => {
       expect(mockSearch).toHaveBeenCalledWith({ sellerId, buyerId })
     })
   })
+
+  describe('show', () => {
+    it('return the deal', async () => {
+      const deal = dealFactory()
+      const mockFindById = jest.fn().mockResolvedValue(deal)
+
+      jest.spyOn(typeorm, 'getCustomRepository').mockReturnValue({
+        findById: mockFindById,
+      })
+
+      const response = await request(App).get(`/v1/deals/${deal.id}`)
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toMatchObject({
+        ok: true,
+        deal: {
+          ...deal,
+          createdAt: deal.createdAt.toISOString()
+        }
+      })
+      expect(mockFindById).toHaveBeenCalledWith(deal.id)
+    })
+
+    it('returns a not found error', async () => {
+      const deal = null
+      const mockFindById = jest.fn().mockResolvedValue(deal)
+      const dealId = faker.datatype.uuid()
+
+      jest.spyOn(typeorm, 'getCustomRepository').mockReturnValue({
+        findById: mockFindById,
+      })
+
+      const response = await request(App).get(`/v1/deals/${dealId}`)
+
+      expect(response.statusCode).toBe(400)
+      expect(response.body).toMatchObject({
+        ok: false,
+        error: {
+          name: 'NotFoundError',
+          message: i18n.__('errors.not-found')
+        }
+      })
+      expect(mockFindById).toHaveBeenCalledWith(dealId)
+    })
+  })
 })
