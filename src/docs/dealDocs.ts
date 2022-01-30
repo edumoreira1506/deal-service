@@ -30,6 +30,10 @@ const dealDocs = {
       title: 'Update deal',
       objectSchema: updateDealSchema,
     },
+    {
+      method: 'get',
+      title: 'Get deal'
+    }
   ], {
     pathVariables: [
       {
