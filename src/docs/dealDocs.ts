@@ -1,6 +1,6 @@
 import createDoc from '@cig-platform/docs/build/docs/createDoc'
 
-import { storeDealSchema } from '@Schemas/DealSchemas'
+import { storeDealSchema, updateDealSchema } from '@Schemas/DealSchemas'
 
 const dealDocs = {
   ...createDoc('/deals', ['Deals'], [
@@ -24,6 +24,20 @@ const dealDocs = {
       ]
     },
   ]),
+  ...createDoc('/deals/{dealId}', ['Deals'], [
+    {
+      method: 'patch',
+      title: 'Update deal',
+      objectSchema: updateDealSchema,
+    },
+  ], {
+    pathVariables: [
+      {
+        name: 'dealId',
+        type: 'string'
+      }
+    ]
+  }),
 }
 
 export default dealDocs

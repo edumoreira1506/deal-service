@@ -16,3 +16,8 @@ export const storeDealSchema = Joi.object({
     'any.required': i18n.__('required-field', { field: 'buyerId' })
   }),
 }).options({ abortEarly: false })
+
+export const updateDealSchema = Joi.object({
+  finished: Joi.bool(),
+  cancelled: Joi.bool()
+}).options({ abortEarly: false })

@@ -3,7 +3,7 @@ import { withBodyValidation } from '@cig-platform/core'
 
 import DealController from '@Controllers/DealController'
 
-import { storeDealSchema } from '@Schemas/DealSchemas'
+import { storeDealSchema, updateDealSchema } from '@Schemas/DealSchemas'
 import { storeDealEventSchema } from '@Schemas/DealEventSchemas'
 
 import withDealParam, { withNotFinishedDealParam } from '@Middlewares/withDealParam'
@@ -13,6 +13,13 @@ const router = express.Router()
 
 router.post('/deals', withBodyValidation(storeDealSchema), DealController.store)
 router.get('/deals', DealController.index)
+
+router.patch(
+  '/deals/:dealId',
+  withBodyValidation(updateDealSchema),
+  withNotFinishedDealParam,
+  DealController.update
+)
 
 router.post(
   '/deals/:dealId/events',
