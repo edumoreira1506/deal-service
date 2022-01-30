@@ -13,6 +13,7 @@ class DealController extends BaseController<Deal, DealRepository>  {
 
     this.store = this.store.bind(this)
     this.index = this.index.bind(this)
+    this.update = this.update.bind(this)
   }
 
   @BaseController.errorHandler()
@@ -26,6 +27,17 @@ class DealController extends BaseController<Deal, DealRepository>  {
     const deal = await this.repository.save(dealDTO)
 
     return BaseController.successResponse(res, { deal, message: i18n.__('messages.success') })
+  }
+
+  @BaseController.errorHandler()
+  @BaseController.actionHandler(i18n.__('messages.updated'))
+  async update(req: Request): Promise<void> {
+    const dealId = req.params.dealId
+
+    await this.repository.updateById(dealId, {
+      finished: req.body?.finished ?? false,
+      cancelled: req.body?.cancelled ?? false,
+    })
   }
 
   @BaseController.errorHandler()

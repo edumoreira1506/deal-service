@@ -14,5 +14,6 @@
 	"deal-event.errors.cancelled-deal": "Essa compra foi cancelada",
 	"deal-event.errors.finished-deal": "Essa compra foi finalizada",
 	"messages.success": "Boa!",
-	"errors.not-found": "Recurso não encontrado"
+	"errors.not-found": "Recurso não encontrado",
+	"messages.updated": "Atualizado com sucesso!"
 }
