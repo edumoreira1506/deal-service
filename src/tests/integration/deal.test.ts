@@ -138,12 +138,13 @@ describe('Deal actions', () => {
       const mockSearch = jest.fn().mockResolvedValue(deals)
       const sellerId = faker.datatype.uuid()
       const buyerId = faker.datatype.uuid()
+      const advertisingId = faker.datatype.uuid()
 
       jest.spyOn(typeorm, 'getCustomRepository').mockReturnValue({
         search: mockSearch,
       })
 
-      const response = await request(App).get(`/v1/deals?sellerId=${sellerId}&buyerId=${buyerId}`)
+      const response = await request(App).get(`/v1/deals?sellerId=${sellerId}&buyerId=${buyerId}&advertisingId=${advertisingId}`)
 
       expect(response.statusCode).toBe(200)
       expect(response.body).toMatchObject({
@@ -151,7 +152,7 @@ describe('Deal actions', () => {
         deals: deals.map(deal => ({ ...deal, createdAt: deal.createdAt.toISOString() })),
         message: i18n.__('messages.success')
       })
-      expect(mockSearch).toHaveBeenCalledWith({ sellerId, buyerId })
+      expect(mockSearch).toHaveBeenCalledWith({ sellerId, buyerId, advertisingId })
     })
   })
 
