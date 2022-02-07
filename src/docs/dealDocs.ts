@@ -20,6 +20,10 @@ const dealDocs = {
         {
           name: 'sellerId',
           type: 'string'
+        },
+        {
+          name: 'advertisingId',
+          type: 'string'
         }
       ]
     },

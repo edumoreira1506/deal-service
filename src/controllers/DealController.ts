@@ -55,7 +55,8 @@ class DealController extends BaseController<Deal, DealRepository>  {
   async index(req: Request, res: Response): Promise<Response> {
     const sellerId = String(req?.query?.sellerId ?? '')
     const buyerId = String(req?.query?.buyerId ?? '')
-    const deals = await this.repository.search({ sellerId, buyerId })
+    const advertisingId = String(req?.query?.advertisingId ?? '')
+    const deals = await this.repository.search({ sellerId, buyerId, advertisingId })
 
     return BaseController.successResponse(res, { deals, message: i18n.__('messages.success') })
   }
