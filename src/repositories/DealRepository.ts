@@ -11,7 +11,8 @@ export default class DealRepository extends BaseRepository<Deal> {
         advertisingId,
         cancelled: false,
         active: true,
-      }
+      },
+      relations: ['events']
     })
   }
 
