@@ -2,6 +2,7 @@ import request from 'supertest'
 import typeorm from 'typeorm'
 import faker from 'faker'
 import { dealFactory, merchantFactory, advertisingFactory } from '@cig-platform/factories'
+import { DealEventValueEnum } from '@cig-platform/enums'
 
 import App from '@Configs/server'
 import AdvertisingServiceClient from '@Clients/AdvertisingServiceClient'
@@ -95,10 +96,15 @@ describe('Deal actions', () => {
       })
     })
 
-    it('is an invalid deal when the advertising already has a deal', async () => {
+    it('is an invalid deal when the advertising already has a confirmed deal', async () => {
       const merchant = merchantFactory()
       const advertising = advertisingFactory()
-      const deal = dealFactory({ advertisingId: advertising.id })
+      const deal = {
+        ...dealFactory({ advertisingId: advertising.id }),
+        events: [
+          { value: DealEventValueEnum.confirmed }
+        ]
+      }
       const mockFind = jest.fn().mockResolvedValue([deal])
       const mockGetMerchant = jest.fn().mockResolvedValue(merchant)
       const mockGetAdvertising = jest.fn().mockResolvedValue(advertising)
