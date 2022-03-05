@@ -6,6 +6,8 @@ import Deal from '@Entities/DealEntity'
 import DealRepository from '@Repositories/DealRepository'
 import { DealEventValueEnum } from '@cig-platform/enums'
 
+export const MAX_DEALS_PER_ADVERTISING = 30
+
 export default class DealBuilder {
   private _advertisingId = '';
   private _buyerId = '';
@@ -51,7 +53,7 @@ export default class DealBuilder {
     )
 
     if (hasConfirmedDeals) throw new ValidationError(i18n.__('deal.errors.already-bought'))
-    if (deals.length >= 30) throw new ValidationError(i18n.__('deal.errors.full'))
+    if (deals.length >= MAX_DEALS_PER_ADVERTISING) throw new ValidationError(i18n.__('deal.errors.full'))
   }
 
 
