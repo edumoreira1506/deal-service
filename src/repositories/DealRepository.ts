@@ -3,6 +3,8 @@ import { BaseRepository } from '@cig-platform/core'
 
 import Deal from '@Entities/DealEntity'
 
+const ITEMS_PER_PAGE = 30
+
 @EntityRepository(Deal)
 export default class DealRepository extends BaseRepository<Deal> {
   findByAdvertisingId(advertisingId: string) {
@@ -16,10 +18,11 @@ export default class DealRepository extends BaseRepository<Deal> {
     })
   }
 
-  async search({ sellerId, buyerId, advertisingId }: {
+  async search({ sellerId, buyerId, advertisingId, page = 0 }: {
     sellerId?: string;
     buyerId?: string;
     advertisingId?: string;
+    page?: number;
   } = {}) {
     try {
       const deals = await this.find({
@@ -28,6 +31,8 @@ export default class DealRepository extends BaseRepository<Deal> {
           ...(buyerId ? { buyerId } : {}),
           ...(advertisingId ? { advertisingId } : {}),
           active: true,
+          skip: page * ITEMS_PER_PAGE,
+          take: ITEMS_PER_PAGE
         }
       })
 
