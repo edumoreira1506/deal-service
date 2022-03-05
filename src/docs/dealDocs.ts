@@ -24,6 +24,10 @@ const dealDocs = {
         {
           name: 'advertisingId',
           type: 'string'
+        },
+        {
+          name: 'page',
+          type: 'string'
         }
       ]
     },
