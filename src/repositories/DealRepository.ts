@@ -18,6 +18,35 @@ export default class DealRepository extends BaseRepository<Deal> {
     })
   }
 
+  static createWhere({ sellerId, buyerId, advertisingId }: {
+    sellerId?: string;
+    buyerId?: string;
+    advertisingId?: string;
+  }) {
+    return {
+      ...(sellerId ? { sellerId } : {}),
+      ...(buyerId ? { buyerId } : {}),
+      ...(advertisingId ? { advertisingId } : {}),
+      active: true,
+    }
+  }
+
+  async countFilter({ sellerId, buyerId, advertisingId }: {
+    sellerId?: string;
+    buyerId?: string;
+    advertisingId?: string;
+  }) {
+    try {
+      const deals = await this.count({
+        where: DealRepository.createWhere({ sellerId, buyerId, advertisingId }),
+      })
+
+      return deals
+    } catch {
+      return 0
+    }
+  }
+
   async search({ sellerId, buyerId, advertisingId, page = 0 }: {
     sellerId?: string;
     buyerId?: string;
@@ -26,14 +55,9 @@ export default class DealRepository extends BaseRepository<Deal> {
   } = {}) {
     try {
       const deals = await this.find({
-        where: {
-          ...(sellerId ? { sellerId } : {}),
-          ...(buyerId ? { buyerId } : {}),
-          ...(advertisingId ? { advertisingId } : {}),
-          active: true,
-          skip: page * ITEMS_PER_PAGE,
-          take: ITEMS_PER_PAGE
-        }
+        where: DealRepository.createWhere({ sellerId, buyerId, advertisingId }),
+        skip: page * ITEMS_PER_PAGE,
+        take: ITEMS_PER_PAGE
       })
 
       return deals
