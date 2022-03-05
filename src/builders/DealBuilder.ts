@@ -51,6 +51,7 @@ export default class DealBuilder {
     )
 
     if (hasConfirmedDeals) throw new ValidationError(i18n.__('deal.errors.already-bought'))
+    if (deals.length >= 30) throw new ValidationError(i18n.__('deal.errors.full'))
   }
 
 
