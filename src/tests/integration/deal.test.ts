@@ -7,6 +7,7 @@ import { DealEventValueEnum } from '@cig-platform/enums'
 import App from '@Configs/server'
 import AdvertisingServiceClient from '@Clients/AdvertisingServiceClient'
 import i18n from '@Configs/i18n'
+import { MAX_DEALS_PER_ADVERTISING } from '@Builders/DealBuilder'
 
 jest.mock('typeorm', () => ({
   createConnection: jest.fn().mockResolvedValue({}),
@@ -133,6 +134,42 @@ describe('Deal actions', () => {
         error: {
           name: 'ValidationError',
           message: i18n.__('deal.errors.already-bought')
+        }
+      })
+    })
+
+    it('is an invalid deal when has more than 30 deals for the same advertising', async () => {
+      const merchant = merchantFactory()
+      const advertising = advertisingFactory()
+      const deal = dealFactory()
+      const mockFind = jest.fn().mockResolvedValue(Array(MAX_DEALS_PER_ADVERTISING).fill(deal))
+      const mockGetMerchant = jest.fn().mockResolvedValue(merchant)
+      const mockGetAdvertising = jest.fn().mockResolvedValue(advertising)
+      const mockSave = jest.fn()
+
+      jest.spyOn(typeorm, 'getCustomRepository').mockReturnValue({
+        findByAdvertisingId: mockFind,
+        save: mockSave
+      })
+      jest.spyOn(AdvertisingServiceClient, 'getMerchant').mockImplementation(mockGetMerchant)
+      jest.spyOn(AdvertisingServiceClient, 'getAdvertising').mockImplementation(mockGetAdvertising)
+
+      const response = await request(App).post('/v1/deals').send({
+        sellerId: deal.sellerId,
+        buyerId: deal.buyerId,
+        advertisingId: deal.advertisingId,
+      })
+
+      expect(response.statusCode).toBe(400)
+      expect(mockGetMerchant).toHaveBeenCalledWith(deal.sellerId)
+      expect(mockGetMerchant).toHaveBeenCalledWith(deal.buyerId)
+      expect(mockGetAdvertising).toHaveBeenCalledWith(deal.sellerId, deal.advertisingId)
+      expect(mockSave).not.toHaveBeenCalled()
+      expect(response.body).toMatchObject({
+        ok: false,
+        error: {
+          name: 'ValidationError',
+          message: i18n.__('deal.errors.full')
         }
       })
     })
