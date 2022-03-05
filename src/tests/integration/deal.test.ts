@@ -147,11 +147,11 @@ describe('Deal actions', () => {
       const advertisingId = faker.datatype.uuid()
       const page = 0
       const pages = 1
-      const mockCountFilter = jest.fn().mockResolvedValue(pages)
+      const mockCountPages = jest.fn().mockResolvedValue(pages)
 
       jest.spyOn(typeorm, 'getCustomRepository').mockReturnValue({
         search: mockSearch,
-        countFilter: mockCountFilter
+        countPages: mockCountPages
       })
 
       const response = await request(App).get(`/v1/deals?sellerId=${sellerId}&buyerId=${buyerId}&advertisingId=${advertisingId}&page=${page}`)
@@ -164,7 +164,7 @@ describe('Deal actions', () => {
         pages
       })
       expect(mockSearch).toHaveBeenCalledWith({ sellerId, buyerId, advertisingId, page })
-      expect(mockCountFilter).toHaveBeenCalledWith({ sellerId, buyerId, advertisingId })
+      expect(mockCountPages).toHaveBeenCalledWith({ sellerId, buyerId, advertisingId })
     })
   })
 

@@ -31,7 +31,7 @@ export default class DealRepository extends BaseRepository<Deal> {
     }
   }
 
-  async countFilter({ sellerId, buyerId, advertisingId }: {
+  async countPages({ sellerId, buyerId, advertisingId }: {
     sellerId?: string;
     buyerId?: string;
     advertisingId?: string;
@@ -41,7 +41,7 @@ export default class DealRepository extends BaseRepository<Deal> {
         where: DealRepository.createWhere({ sellerId, buyerId, advertisingId }),
       })
 
-      return deals
+      return Math.ceil(deals / ITEMS_PER_PAGE)
     } catch {
       return 0
     }
