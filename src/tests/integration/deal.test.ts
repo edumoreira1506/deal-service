@@ -146,9 +146,12 @@ describe('Deal actions', () => {
       const buyerId = faker.datatype.uuid()
       const advertisingId = faker.datatype.uuid()
       const page = 0
+      const pages = 1
+      const mockCountFilter = jest.fn().mockResolvedValue(pages)
 
       jest.spyOn(typeorm, 'getCustomRepository').mockReturnValue({
         search: mockSearch,
+        countFilter: mockCountFilter
       })
 
       const response = await request(App).get(`/v1/deals?sellerId=${sellerId}&buyerId=${buyerId}&advertisingId=${advertisingId}&page=${page}`)
@@ -157,9 +160,11 @@ describe('Deal actions', () => {
       expect(response.body).toMatchObject({
         ok: true,
         deals: deals.map(deal => ({ ...deal, createdAt: deal.createdAt.toISOString() })),
-        message: i18n.__('messages.success')
+        message: i18n.__('messages.success'),
+        pages
       })
       expect(mockSearch).toHaveBeenCalledWith({ sellerId, buyerId, advertisingId, page })
+      expect(mockCountFilter).toHaveBeenCalledWith({ sellerId, buyerId, advertisingId })
     })
   })
 
