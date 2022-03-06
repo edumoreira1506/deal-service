@@ -1,6 +1,6 @@
 import request from 'supertest'
 import typeorm from 'typeorm'
-import faker from 'faker'
+import faker from '@faker-js/faker'
 import { dealFactory } from '@cig-platform/factories'
 import { IDealEvent } from '@cig-platform/types'
 
