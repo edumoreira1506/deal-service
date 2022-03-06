@@ -1,6 +1,6 @@
 import request from 'supertest'
 import typeorm from 'typeorm'
-import faker from 'faker'
+import faker from '@faker-js/faker'
 import { dealFactory, merchantFactory, advertisingFactory } from '@cig-platform/factories'
 import { DealEventValueEnum } from '@cig-platform/enums'
 

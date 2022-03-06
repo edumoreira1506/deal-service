@@ -1,9 +1,9 @@
 import DealEvent from '@Entities/DealEventEntity'
 
 export default class DealBuilder {
-  private _value = '';
-  private _metadata: Record<string, any> = {};
-  private _dealId = '';
+  private _value = ''
+  private _metadata: Record<string, any> = {}
+  private _dealId = ''
 
   setMetadata(metadata: Record<string, any>): DealBuilder {
     this._metadata = metadata

@@ -9,10 +9,10 @@ import { DealEventValueEnum } from '@cig-platform/enums'
 export const MAX_DEALS_PER_ADVERTISING = 30
 
 export default class DealBuilder {
-  private _advertisingId = '';
-  private _buyerId = '';
-  private _sellerId = '';
-  private _dealRepository: DealRepository;
+  private _advertisingId = ''
+  private _buyerId = ''
+  private _sellerId = ''
+  private _dealRepository: DealRepository
 
   constructor(dealRepository: DealRepository) {
     this._dealRepository = dealRepository
