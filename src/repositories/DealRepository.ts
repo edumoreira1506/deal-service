@@ -31,19 +31,19 @@ export default class DealRepository extends BaseRepository<Deal> {
     }
   }
 
-  async countPages({ sellerId, buyerId, advertisingId }: {
+  async countDetails({ sellerId, buyerId, advertisingId }: {
     sellerId?: string;
     buyerId?: string;
     advertisingId?: string;
   }) {
     try {
-      const deals = await this.count({
+      const dealsAmount = await this.count({
         where: DealRepository.createWhere({ sellerId, buyerId, advertisingId }),
       })
 
-      return Math.ceil(deals / ITEMS_PER_PAGE)
+      return { pages: Math.ceil(dealsAmount / ITEMS_PER_PAGE), total: dealsAmount }
     } catch {
-      return 0
+      return { pages: 0, total: 0 }
     }
   }
 

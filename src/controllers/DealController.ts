@@ -57,10 +57,10 @@ class DealController extends BaseController<Deal, DealRepository>  {
     const buyerId = String(req?.query?.buyerId ?? '')
     const page = Number(req?.query?.page ?? 0)
     const advertisingId = String(req?.query?.advertisingId ?? '')
-    const pages = await this.repository.countPages({ sellerId, buyerId, advertisingId })
+    const { pages, total } = await this.repository.countDetails({ sellerId, buyerId, advertisingId })
     const deals = await this.repository.search({ sellerId, buyerId, advertisingId, page })
 
-    return BaseController.successResponse(res, { pages, deals, message: i18n.__('messages.success') })
+    return BaseController.successResponse(res, { total, pages, deals, message: i18n.__('messages.success') })
   }
 }
 
