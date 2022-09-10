@@ -8,10 +8,12 @@ const dealEventDocs = {
       method: 'post',
       title: 'Register deal event',
       objectSchema: storeDealEventSchema,
+      headerParams: [{ type: 'string', name: 'Cig-Api-Key' }]
     },
     {
       method: 'get',
       title: 'Get deal events',
+      headerParams: [{ type: 'string', name: 'Cig-Api-Key' }]
     }
   ], {
     pathVariables: [
