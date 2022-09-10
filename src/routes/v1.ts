@@ -8,21 +8,24 @@ import { storeDealEventSchema } from '@Schemas/DealEventSchemas'
 
 import withDealParam, { withNotFinishedDealParam } from '@Middlewares/withDealParam'
 import DealEventController from '@Controllers/DealEventController'
+import withApiKey from '@Middlewares/withApiKey'
 
 const router = express.Router()
 
-router.post('/deals', withBodyValidation(storeDealSchema), DealController.store)
+router.post('/deals', withApiKey, withBodyValidation(storeDealSchema), DealController.store)
 
-router.get('/deals', DealController.index)
+router.get('/deals', withApiKey, DealController.index)
 
 router.get(
   '/deals/:dealId',
+  withApiKey,
   withDealParam,
   DealController.show
 )
 
 router.patch(
   '/deals/:dealId',
+  withApiKey,
   withBodyValidation(updateDealSchema),
   withNotFinishedDealParam,
   DealController.update
@@ -30,6 +33,7 @@ router.patch(
 
 router.post(
   '/deals/:dealId/events',
+  withApiKey,
   withBodyValidation(storeDealEventSchema),
   withNotFinishedDealParam,
   DealEventController.store
@@ -37,6 +41,7 @@ router.post(
 
 router.get(
   '/deals/:dealId/events',
+  withApiKey,
   withDealParam,
   DealEventController.index
 )
