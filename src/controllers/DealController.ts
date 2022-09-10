@@ -1,16 +1,16 @@
 import { Request, Response } from 'express'
-import { ObjectType } from 'typeorm'
 import { BaseController, NotFoundError } from '@cig-platform/core'
 
 import i18n from '@Configs/i18n'
 import DealRepository from '@Repositories/DealRepository'
-import Deal from '@Entities/DealEntity'
 import DealBuilder from '@Builders/DealBuilder'
 import { RequestWithDeal } from '@Types/requests'
 
-class DealController extends BaseController<Deal, DealRepository>  {
-  constructor(repository: ObjectType<Deal>) {
-    super(repository)
+class DealController {
+  private repository: typeof DealRepository
+
+  constructor(_repository: typeof DealRepository) {
+    this.repository = _repository
 
     this.store = this.store.bind(this)
     this.index = this.index.bind(this)

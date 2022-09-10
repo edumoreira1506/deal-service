@@ -12,9 +12,9 @@ export default class DealBuilder {
   private _advertisingId = ''
   private _buyerId = ''
   private _sellerId = ''
-  private _dealRepository: DealRepository
+  private _dealRepository: typeof DealRepository
 
-  constructor(dealRepository: DealRepository) {
+  constructor(dealRepository: typeof DealRepository) {
     this._dealRepository = dealRepository
   }
 

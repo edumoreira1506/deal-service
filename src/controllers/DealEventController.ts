@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
-import { ObjectType } from 'typeorm'
 import { BaseController } from '@cig-platform/core'
 
 import i18n from '@Configs/i18n'
 import DealEventRepository from '@Repositories/DealEventRepository'
-import DealEvent from '@Entities/DealEventEntity'
 import DealEventBuilder from '@Builders/DealEventBuilder'
 
-class DealEventController extends BaseController<DealEvent, DealEventRepository>  {
-  constructor(repository: ObjectType<DealEvent>) {
-    super(repository)
+class DealEventController  {
+  private repository: typeof DealEventRepository
+
+  constructor(_repository: typeof DealEventRepository) {
+    this.repository = _repository
 
     this.store = this.store.bind(this)
     this.index = this.index.bind(this)

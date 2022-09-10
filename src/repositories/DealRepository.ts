@@ -1,12 +1,14 @@
-import { EntityRepository } from 'typeorm'
-import { BaseRepository } from '@cig-platform/core'
-
-import Deal from '@Entities/DealEntity'
+import { BaseRepositoryFunctionsGenerator } from '@cig-platform/core'
+import { dataSource } from '@Configs/database'
+import DealEntity from '@Entities/DealEntity'
 
 const ITEMS_PER_PAGE = 30
 
-@EntityRepository(Deal)
-export default class DealRepository extends BaseRepository<Deal> {
+const BaseRepository = BaseRepositoryFunctionsGenerator<DealEntity>()
+
+const DealRepository = dataSource.getRepository(DealEntity).extend({
+  ...BaseRepository,
+
   findByAdvertisingId(advertisingId: string) {
     return this.find({
       where: {
@@ -16,20 +18,7 @@ export default class DealRepository extends BaseRepository<Deal> {
       },
       relations: ['events']
     })
-  }
-
-  static createWhere({ sellerId, buyerId, advertisingId }: {
-    sellerId?: string;
-    buyerId?: string;
-    advertisingId?: string;
-  }) {
-    return {
-      ...(sellerId ? { sellerId } : {}),
-      ...(buyerId ? { buyerId } : {}),
-      ...(advertisingId ? { advertisingId } : {}),
-      active: true,
-    }
-  }
+  },
 
   async countDetails({ sellerId, buyerId, advertisingId }: {
     sellerId?: string;
@@ -38,14 +27,14 @@ export default class DealRepository extends BaseRepository<Deal> {
   }) {
     try {
       const dealsAmount = await this.count({
-        where: DealRepository.createWhere({ sellerId, buyerId, advertisingId }),
+        where: createWhere({ sellerId, buyerId, advertisingId }),
       })
 
       return { pages: Math.ceil(dealsAmount / ITEMS_PER_PAGE), total: dealsAmount }
     } catch {
       return { pages: 0, total: 0 }
     }
-  }
+  },
 
   async search({ sellerId, buyerId, advertisingId, page = 0 }: {
     sellerId?: string;
@@ -55,7 +44,7 @@ export default class DealRepository extends BaseRepository<Deal> {
   } = {}) {
     try {
       const deals = await this.find({
-        where: DealRepository.createWhere({ sellerId, buyerId, advertisingId }),
+        where: createWhere({ sellerId, buyerId, advertisingId }),
         skip: page * ITEMS_PER_PAGE,
         take: ITEMS_PER_PAGE
       })
@@ -64,5 +53,20 @@ export default class DealRepository extends BaseRepository<Deal> {
     } catch {
       return []
     }
+  }
+})
+
+export default DealRepository
+
+function createWhere({ sellerId, buyerId, advertisingId }: {
+  sellerId?: string;
+  buyerId?: string;
+  advertisingId?: string;
+}) {
+  return {
+    ...(sellerId ? { sellerId } : {}),
+    ...(buyerId ? { buyerId } : {}),
+    ...(advertisingId ? { advertisingId } : {}),
+    active: true,
   }
 }
